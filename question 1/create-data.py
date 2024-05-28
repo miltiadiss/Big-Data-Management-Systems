@@ -1,6 +1,7 @@
 import random
 import os
 from uxsim import World
+from IPython.display import display, Image
 
 seed = None
 
@@ -96,3 +97,7 @@ if not os.path.exists(subfolder):
 csv_file_path = os.path.join(subfolder, 'vehicles.csv')
 
 W.analyzer.vehicles_to_pandas().to_csv(csv_file_path, index=False)
+W.analyzer.network_anim(detailed=0, network_font_size=1, figsize=(6,6))
+
+with open("out/anim_network0.gif", "rb") as f:
+    display(Image(data=f.read(), format='png'))
