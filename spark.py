@@ -1,13 +1,13 @@
 from kafka import KafkaConsumer
 import json
+import os
 from pyspark.sql import SparkSession
-from pyspark.sql.functions import col, avg, count
 from pyspark.sql.types import StructType, StructField, StringType, FloatType, IntegerType, TimestampType
+from pyspark.sql.functions import col, avg, count
 
 # Ρύθμιση περιβαλλοντικών μεταβλητών
-import os
-os.environ['JAVA_HOME'] = 'C:\\java'
-os.environ['HADOOP_HOME'] = 'C:\\hadoop'
+os.environ['JAVA_HOME'] = 'C:\\java'  # Προσαρμόστε το path ανάλογα με την εγκατάστασή σας
+os.environ['SPARK_HOME'] = 'C:\\spark'  # Προσαρμόστε το path ανάλογα με την εγκατάστασή σας
 
 # Δημιουργία SparkSession
 spark = SparkSession.builder \
