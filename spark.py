@@ -6,7 +6,7 @@ from pyspark.sql.types import StructType, StructField, StringType, FloatType, In
 from pyspark.sql.functions import col, avg, count
 
 # Ρύθμιση περιβαλλοντικών μεταβλητών
-os.environ['JAVA_HOME'] = 'C:\\java'  # Προσαρμόστε το path ανάλογα με την εγκατάστασή σας
+os.environ['JAVA_HOME'] = 'C:\\java\\jdk'  # Προσαρμόστε το path ανάλογα με την εγκατάστασή σας
 os.environ['SPARK_HOME'] = 'C:\\spark'  # Προσαρμόστε το path ανάλογα με την εγκατάστασή σας
 
 # Δημιουργία SparkSession
