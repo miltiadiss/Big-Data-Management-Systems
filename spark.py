@@ -3,11 +3,8 @@ import json
 import os
 from pyspark.sql import SparkSession
 from pyspark.sql.types import StructType, StructField, StringType, FloatType, IntegerType, TimestampType
-from pyspark.sql.functions import col, avg, count
+from pyspark.sql.functions import col, avg, count, to_timestamp
 
-# Ρύθμιση περιβαλλοντικών μεταβλητών
-os.environ['JAVA_HOME'] = 'C:\\java\\jdk'  # Προσαρμόστε το path ανάλογα με την εγκατάστασή σας
-os.environ['SPARK_HOME'] = 'C:\\spark'  # Προσαρμόστε το path ανάλογα με την εγκατάστασή σας
 
 # Δημιουργία SparkSession
 spark = SparkSession.builder \
@@ -71,8 +68,8 @@ try:
         # Μετατροπή σε DataFrame
         df = spark.createDataFrame(processed_data, schema=schema)
 
-        # Μετατροπή της στήλης 'time' σε TimestampType
-        df = df.withColumn("time", col("time").cast(TimestampType()))
+        # Μετατροπή της στήλης 'time' σε TimestampType χρησιμοποιώντας to_timestamp
+        df = df.withColumn("time", to_timestamp(col("time"), "dd/MM/yyyy HH:mm:ss"))
 
         # Υπολογισμός vcount και vspeed
         result_df = df.groupBy("time", "link") \
