@@ -53,17 +53,31 @@ def main():
     # Query data from MongoDB for the specified time period
     data = query_data_between_period(start_time, end_time)
 
-    # Answer question 1: Link with the fewest vehicles
-    link_fewest_vehicles, vcount = find_link_with_fewest_vehicles(data)
-    print(f"1. Link with the fewest vehicles: {link_fewest_vehicles} with {vcount} vehicles.")
+    # Ask user which query they want to execute
+    print("Choose a query to execute:")
+    print("1. Find the link with the fewest vehicles.")
+    print("2. Find the link with the highest average speed.")
+    print("3. Find the longest route (based on vehicle count).")
 
-    # Answer question 2: Link with the highest average speed
-    link_highest_speed, avg_speed = find_link_with_highest_avg_speed(data)
-    print(f"2. Link with the highest average speed: {link_highest_speed} with an average speed of {avg_speed}.")
+    choice = input("Enter your choice (1/2/3): ")
 
-    # Answer question 3: Longest route (using vcount as proxy for route length)
-    link_longest_route, longest_route = find_longest_route(data)
-    print(f"3. Longest route (based on vehicle count): {link_longest_route} with {longest_route} vehicles.")
+    if choice == '1':
+        # Answer question 1: Link with the fewest vehicles
+        link_fewest_vehicles, vcount = find_link_with_fewest_vehicles(data)
+        print(f"Link with the fewest vehicles: {link_fewest_vehicles} with {vcount} vehicles.")
+    
+    elif choice == '2':
+        # Answer question 2: Link with the highest average speed
+        link_highest_speed, avg_speed = find_link_with_highest_avg_speed(data)
+        print(f"Link with the highest average speed: {link_highest_speed} with an average speed of {avg_speed}.")
+    
+    elif choice == '3':
+        # Answer question 3: Longest route (based on vehicle count)
+        link_longest_route, longest_route = find_longest_route(data)
+        print(f"Longest route (based on vehicle count): {link_longest_route} with {longest_route} vehicles.")
+    
+    else:
+        print("Invalid choice. Please select a valid option.")
 
 if __name__ == "__main__":
     main()
