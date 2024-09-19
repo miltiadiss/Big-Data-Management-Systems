@@ -17,7 +17,7 @@ def find_link_with_highest_avg_speed(start_time, end_time):
         {"$limit": 1}
     ]
 
-def max_route(start_time, end_time):
+def find_longest_route(start_time, end_time):
     return [ 
         {"$match": {"time": {"$gte": start_time, "$lte": end_time}}},
         {"$group": {"_id": "$link", "totalDistance": {"$sum": "$vcount"}}},
@@ -56,7 +56,7 @@ def main():
                 print("No data found.")
         
         elif int(query) == 3:
-            result = collection.aggregate(max_route(start_time, end_time))
+            result = collection.aggregate(find_longest_route(start_time, end_time))
             result = list(result)
             if result:
                 r = result[0]
