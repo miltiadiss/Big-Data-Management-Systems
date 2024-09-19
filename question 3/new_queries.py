@@ -26,9 +26,21 @@ def find_longest_route(start_time, end_time):
     ]
 
 def main():
-    start_time = input('Give Start Time (YYYY-MM-DD HH:MM:SS): ')
-    end_time = input('Give End Time (YYYY-MM-DD HH:MM:SS): ')
-    query = input('Select query (1 or 2 or 3): ')
+    # Input the time range for querying
+    start_time_str = input("Enter the start time (dd/mm/yyyy HH:MM:SS): ")
+    end_time_str = input("Enter the end time (dd/mm/yyyy HH:MM:SS): ")
+
+    # Convert the input strings to datetime objects
+    start_time = datetime.strptime(start_time_str, "%d/%m/%Y %H:%M:%S")
+    end_time = datetime.strptime(end_time_str, "%d/%m/%Y %H:%M:%S")
+
+    # Ask user which query they want to execute
+    print("Choose a query to execute:")
+    print("1. Find the link with the fewest vehicles.")
+    print("2. Find the link with the highest average speed.")
+    print("3. Find the longest route (based on vehicle count).")
+
+    choice = input("Enter your choice (1/2/3): ")
 
     client = MongoClient('localhost', 27017)
     db = client['vehicle_data']
@@ -42,27 +54,27 @@ def main():
             result = list(result)
             if result:
                 r = result[0]
-                print(f"Link with the fewest vehicles: {r['_id']} with {r['totalVehicles']} vehicles.")
+                print(f"Link with the fewest vehicles is {r['_id']} and has in total {r['totalVehicles']} vehicles.")
             else:
-                print("No data found.")
+                print("Error.")
         
         elif int(query) == 2:
             result = collection.aggregate(find_link_with_highest_avg_speed(start_time, end_time))
             result = list(result)
             if result:
                 r = result[0]
-                print(f"Link with the highest average speed: {r['_id']} with an average speed of {r['avgSpeed']}.")
+                print(f"Link with highest average speed is {r['_id']} and has average speed  {r['avgSpeed']}.")
             else:
-                print("No data found.")
+                print("Error.")
         
         elif int(query) == 3:
             result = collection.aggregate(find_longest_route(start_time, end_time))
             result = list(result)
             if result:
                 r = result[0]
-                print(f"Longest route: {r['_id']} with a total distance of {r['totalDistance']}.")
+                print(f"Longest route is {r['_id']} with distance {r['totalDistance']}.")
             else:
-                print("No data found.")
+                print("Error.")
         else:
             print("Invalid choice. Please select a valid option.")
     except Exception as e:
