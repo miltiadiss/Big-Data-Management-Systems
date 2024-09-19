@@ -1,7 +1,7 @@
 from pymongo import MongoClient
 from bson.json_util import dumps, loads
 
-def min_vehicles(start_time, end_time):
+def find_link_with_fewest_vehicles(start_time, end_time):
     return [ 
         {"$match": {"time": {"$gte": start_time, "$lte": end_time}}},
         {"$group": {"_id": "$link", "totalVehicles": {"$sum": "$vcount"}}},
@@ -38,7 +38,7 @@ def main():
     try:
         # Execute the aggregation
         if int(query) == 1:
-            result = collection.aggregate(min_vehicles(start_time, end_time))
+            result = collection.aggregate(find_link_with_fewest_vehicles(start_time, end_time))
             result = list(result)
             if result:
                 r = result[0]
