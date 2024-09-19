@@ -1,10 +1,8 @@
-from kafka import KafkaConsumer
+kafka import KafkaConsumer
 import json
-import os
 from pyspark.sql import SparkSession
 from pyspark.sql.types import StructType, StructField, StringType, FloatType, IntegerType, TimestampType
 from pyspark.sql.functions import col, avg, count, to_timestamp
-
 
 # Δημιουργία SparkSession
 spark = SparkSession.builder \
@@ -39,9 +37,11 @@ consumer = KafkaConsumer(
 
 print("Kafka Consumer is listening...")
 
+# Αρχικοποίηση ενός κενού DataFrame για συσσώρευση δεδομένων
+accumulated_df = spark.createDataFrame([], schema)
 
 def process_message(message):
-    # Επεξεργασία του μηνύματος
+ # Επεξεργασία του μηνύματος
     data = {
         "name": message['name'],
         "origin": message['origin'],
@@ -54,7 +54,6 @@ def process_message(message):
     }
     return data
 
-
 try:
     # Διαβάζουμε τα μηνύματα από το Kafka broker
     for message in consumer:
@@ -63,7 +62,7 @@ try:
         print(f"Received: {message_value}")
 
         # Επεξεργασία του μηνύματος
-        processed_data = [process_message(message_value)]
+        processed_data = [process_message(message_value)]  # Process one vehicle at a time
 
         # Μετατροπή σε DataFrame
         df = spark.createDataFrame(processed_data, schema=schema)
@@ -71,16 +70,18 @@ try:
         # Μετατροπή της στήλης 'time' σε TimestampType χρησιμοποιώντας to_timestamp
         df = df.withColumn("time", to_timestamp(col("time"), "dd/MM/yyyy HH:mm:ss"))
 
-        # Υπολογισμός vcount και vspeed
-        result_df = df.groupBy("time", "link") \
+        # Συσσώρευση δεδομένων σε ένα DataFrame που περιέχει όλα τα δεδομένα μέχρι τώρα
+        accumulated_df = accumulated_df.union(df)
+
+        # Υπολογισμός vcount και vspeed για όλα τα δεδομένα που έχουν ληφθεί μέχρι τώρα
+        result_df = accumulated_df.groupBy("time", "link") \
             .agg(
-            count("name").alias("vcount"),
-            avg("speed").alias("vspeed")
-        )
+                count("name").alias("vcount"),
+                avg("speed").alias("vspeed")
+            )
 
-        # Εμφάνιση του DataFrame
+        # Εμφάνιση του DataFrame με τα ενημερωμένα vcount και vspeed
         result_df.show()
-
 except KeyboardInterrupt:
     print("Consumer interrupted by user.")
 
@@ -88,3 +89,5 @@ finally:
     # Κλείνουμε τον consumer
     consumer.close()
     print("Kafka consumer closed.")
+
+
