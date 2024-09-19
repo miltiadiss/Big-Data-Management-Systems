@@ -9,7 +9,7 @@ def find_link_with_fewest_vehicles(start_time, end_time):
         {"$limit": 1}
     ]
 
-def max_avg_speed(start_time, end_time):
+def find_link_with_highest_avg_speed(start_time, end_time):
     return [ 
         {"$match": {"time": {"$gte": start_time, "$lte": end_time}}},
         {"$group": {"_id": "$link", "avgSpeed": {"$avg": "$vspeed"}}},
@@ -47,7 +47,7 @@ def main():
                 print("No data found.")
         
         elif int(query) == 2:
-            result = collection.aggregate(max_avg_speed(start_time, end_time))
+            result = collection.aggregate(find_link_with_highest_avg_speed(start_time, end_time))
             result = list(result)
             if result:
                 r = result[0]
