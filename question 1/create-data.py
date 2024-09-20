@@ -101,7 +101,3 @@ W.analyzer.vehicles_to_pandas().to_csv(csv_file_path, index=False)
 W.analyzer.network_anim(detailed=0, network_font_size=1, figsize=(6,6))
 with open("out/anim_network0.gif", "rb") as f:
     display(Image(data=f.read(), format='png'))
-
-W.analyzer.network_fancy(animation_speed_inverse=15, sample_ratio=0.3, interval=3, trace_length=5, network_font_size=1)
-with open("out/anim_network_fancy.gif", "rb") as f:
-    display(Image(data=f.read(), format='png'))
