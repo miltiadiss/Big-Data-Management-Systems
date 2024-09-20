@@ -31,7 +31,7 @@ def find_links_with_fewest_vehicles(data):
     if links_with_fewest_vehicles:
         print("Links with the fewest vehicles:")
         for link, vcount in links_with_fewest_vehicles.items():
-            print(f"Link: {link} with {vcount} vehicles.")
+            print(f"{link}")
     else:
         print("No links found with the fewest vehicles.")
    
@@ -50,7 +50,7 @@ def find_links_with_highest_avg_speed(data):
     if links_with_highest_speed:
         print("Links with the highest average speed:")
         for link, vspeed in links_with_highest_speed.items():
-            print(f"Link: {link} with an average speed of {vspeed}.")
+            print(f"{link}")
     else:
         print("No links found with the highest average speed.")
    
